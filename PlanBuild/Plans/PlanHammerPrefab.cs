@@ -160,8 +160,9 @@ namespace PlanBuild.Plans
             
             private void OnDestroy()
             {
-                On.Player.PlacePiece -= Player_PlacePiece;
-                On.Player.PieceRayTest -= Player_PieceRayTest;
+                EventHooks.OnPlayerPieceRayTestComplete -= Player_PieceRayTest;
+                EventHooks.OnPlayerPlacePiece -= Player_PlacePiece;
+                DeletePlanComponentCounter -= 1;
                 Logger.LogDebug($"{gameObject.name} destroyed");
             }
             
