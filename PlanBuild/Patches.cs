@@ -1,5 +1,6 @@
 ﻿using BepInEx.Bootstrap;
 using HarmonyLib;
+using PlanBuild.Blueprints;
 using PlanBuild.Plans;
 
 namespace PlanBuild
@@ -17,7 +18,13 @@ namespace PlanBuild
         internal static void Apply()
         {
             Harmony = new Harmony(PlanBuildPlugin.PluginGUID);
+
+            // Apply patches for PlanBuild functionality
+            Harmony.PatchAll(typeof(EventHooks));
             Harmony.PatchAll(typeof(PlanPiece));
+            Harmony.PatchAll(typeof(BlueprintSync));
+            Harmony.PatchAll(typeof(PlanManager));
+            Harmony.PatchAll(typeof(BlueprintManager));
 
             if (Chainloader.PluginInfos.ContainsKey(BuildCameraGUID))
             {
