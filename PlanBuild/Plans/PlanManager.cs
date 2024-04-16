@@ -212,22 +212,26 @@ namespace PlanBuild.Plans
             }
         }
         
-        private static bool Player_CheckCanRemovePiece(On.Player.orig_CheckCanRemovePiece orig, Player self, Piece piece)
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(Player), nameof(Player.CheckCanRemovePiece))]
+        private static bool Player_CheckCanRemovePiece(Player __instance, Piece piece, ref bool __result)
         {
-            var planHammer = self.m_visEquipment.m_rightItem.Equals(PlanHammerPrefab.PlanHammerName);
+            var planHammer = __instance.m_visEquipment.m_rightItem.Equals(PlanHammerPrefab.PlanHammerName);
             var planPiece = piece.TryGetComponent<PlanPiece>(out _);
 
             if (planHammer)
             {
-                return planPiece;
+                __result = planPiece;
+                return false;
             }
 
             if (planPiece)
             {
+                __result = false;
                 return false;
             }
 
-            return orig(self, piece);
+            return true;
         }
 
         private static void WearNTear_Highlight(On.WearNTear.orig_Highlight orig, WearNTear self)
