@@ -172,24 +172,33 @@ namespace PlanBuild.Plans
             return true;
         }
 
-        private static void Player_SetupPlacementGhost(On.Player.orig_SetupPlacementGhost orig, Player self)
+        [HarmonyPrefix]
+        [HarmonyPriority(Priority.Last)]
+        [HarmonyPatch(typeof(Player), nameof(Player.SetupPlacementGhost))]
+        private static void Player_SetupPlacementGhostPrefix(Player __instance)
+        {
+            PlanPiece.m_forceDisableInit = true;
+        }
+
+        [HarmonyPostfix]
+        [HarmonyPriority(Priority.First)]
+        [HarmonyPatch(typeof(Player), nameof(Player.SetupPlacementGhost))]
+        private static void Player_SetupPlacementGhostPostfix(Player __instance)
         {
             try
             {
-                PlanPiece.m_forceDisableInit = true;
-                orig(self);
-                if (self.m_placementGhost)
+                if (__instance.m_placementGhost)
                 {
                     if (PlanCrystalPrefab.ShowRealTextures)
                     {
-                        ShaderHelper.UpdateTextures(self.m_placementGhost, ShaderHelper.ShaderState.Skuld);
+                        ShaderHelper.UpdateTextures(__instance.m_placementGhost, ShaderHelper.ShaderState.Skuld);
                     }
                     else if (Config.ConfigTransparentGhostPlacement.Value
-                             && (self.m_placementGhost.name.StartsWith(Blueprint.PieceBlueprintName)
-                                 || self.m_placementGhost.name.Split('(')[0].EndsWith(PlanPiecePrefab.PlannedSuffix))
+                             && (__instance.m_placementGhost.name.StartsWith(Blueprint.PieceBlueprintName)
+                                 || __instance.m_placementGhost.name.Split('(')[0].EndsWith(PlanPiecePrefab.PlannedSuffix))
                     )
                     {
-                        ShaderHelper.UpdateTextures(self.m_placementGhost, ShaderHelper.ShaderState.Supported);
+                        ShaderHelper.UpdateTextures(__instance.m_placementGhost, ShaderHelper.ShaderState.Supported);
                     }
                 }
             }
