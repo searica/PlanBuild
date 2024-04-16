@@ -32,7 +32,7 @@ namespace PlanBuild.Blueprints.Components
                 MarkerOffset = Vector3.zero;
             }
 
-            On.Player.UpdatePlacement += Player_UpdatePlacement;
+            EventHooks.OnPlayerUpdatedPlacement += Player_UpdatePlacement;
             On.Player.UpdateWearNTearHover += Player_UpdateWearNTearHover;
             On.Player.PlacePiece += Player_PlacePiece;
 
@@ -60,7 +60,7 @@ namespace PlanBuild.Blueprints.Components
             OnOnDestroy();
             DisableSelectionProjector();
 
-            On.Player.UpdatePlacement -= Player_UpdatePlacement;
+            EventHooks.OnPlayerUpdatedPlacement -= Player_UpdatePlacement;
             On.Player.UpdateWearNTearHover -= Player_UpdateWearNTearHover;
             On.Player.PlacePiece -= Player_PlacePiece;
 
@@ -80,13 +80,11 @@ namespace PlanBuild.Blueprints.Components
         /// <summary>
         ///     Update the tool's placement
         /// </summary>
-        private void Player_UpdatePlacement(On.Player.orig_UpdatePlacement orig, Player self, bool takeInput, float dt)
+        private void Player_UpdatePlacement(object sender, UpdatePlacementEventArgs args)
         {
-            orig(self, takeInput, dt);
-
-            if (self.m_placementGhost && takeInput)
+            if (args.player.m_placementGhost && args.takeInput)
             {
-                OnUpdatePlacement(self);
+                OnUpdatePlacement(args.player);
             }
         }
 
