@@ -166,19 +166,19 @@ namespace PlanBuild.Plans
                 Logger.LogDebug($"{gameObject.name} destroyed");
             }
             
-            private bool Player_PieceRayTest(On.Player.orig_PieceRayTest orig, Player self, out Vector3 point, out Vector3 normal, out Piece piece, out Heightmap heightmap, out Collider waterSurface, bool water)
+            private void Player_PieceRayTest(object sender, RayTestEventArgs args)
             {
-                bool result = orig(self, out point, out normal, out piece, out heightmap, out waterSurface, water);
-                LastHoveredPiece = piece;
-                return result;
+                LastHoveredPiece = args.piece;   
             }
 
-            private bool Player_PlacePiece(On.Player.orig_PlacePiece orig, Player self, Piece piece)
+            private void Player_PlacePiece(object sender, PlayerEventArgs args)
             {
                 if (LastHoveredPiece && LastHoveredPiece.TryGetComponent(out PlanPiece planPiece))
                 {
                     planPiece.m_wearNTear.Remove();
                 }
+        }
+        }
                 return false;
             }
         }
