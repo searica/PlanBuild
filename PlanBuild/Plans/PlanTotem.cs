@@ -40,14 +40,17 @@ namespace PlanBuild.Plans
                 return true;
             }
 
-        private static string OnContainerHoverText(On.Container.orig_GetHoverText orig, Container self)
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(Container), nameof(Container.GetHoverText))]
+        private static bool OnContainerHoverText(Container __instance, ref string __result)
         {
-            PlanTotem planTotem = self as PlanTotem;
+            PlanTotem planTotem = __instance as PlanTotem;
             if (planTotem)
             {
-                return planTotem.GetHoverText();
+                __result = planTotem.GetHoverText();
+                return false;
             }
-            return orig(self);
+            return true;
         }
 
         #endregion Container Override
