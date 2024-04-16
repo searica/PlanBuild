@@ -24,6 +24,8 @@ namespace PlanBuild.Plans
         private static GameObject PieceDeletePlansPrefab;
         private static CustomItem PlanHammerItem;
 
+        internal static int DeletePlanComponentCounter = 0;
+
         public static void Create(AssetBundle planbuildBundle)
         {
             HammerIcon = planbuildBundle.LoadAsset<Sprite>("plan_hammer");
