@@ -58,7 +58,7 @@ namespace PlanBuild.Blueprints.Components
 
             On.Player.PlacePiece += Player_PlacePiece;
 
-            On.Player.UpdatePlacementGhost += Player_UpdatePlacementGhost;
+            EventHooks.OnPlayerUpdatedPlacementGhost += Player_UpdatePlacementGhost;
             On.Player.PieceRayTest += Player_PieceRayTest;
 
             On.GameCamera.UpdateCamera += GameCamera_UpdateCamera;
@@ -86,7 +86,7 @@ namespace PlanBuild.Blueprints.Components
             On.Player.UpdateWearNTearHover -= Player_UpdateWearNTearHover;
             On.Player.PlacePiece -= Player_PlacePiece;
 
-            On.Player.UpdatePlacementGhost -= Player_UpdatePlacementGhost;
+            EventHooks.OnPlayerUpdatedPlacementGhost -= Player_UpdatePlacementGhost;
             On.Player.PieceRayTest -= Player_PieceRayTest;
 
             On.GameCamera.UpdateCamera -= GameCamera_UpdateCamera;
@@ -250,9 +250,9 @@ namespace PlanBuild.Blueprints.Components
         /// <summary>
         ///     Flatten placement marker and apply the PlacementOffset
         /// </summary>
-        private void Player_UpdatePlacementGhost(On.Player.orig_UpdatePlacementGhost orig, Player self, bool flashGuardStone)
+        private void Player_UpdatePlacementGhost(object sender, PlayerEventArgs args)
         {
-            orig(self, flashGuardStone);
+            var self = args.player;
 
             if (self.m_placementMarkerInstance)
             {
