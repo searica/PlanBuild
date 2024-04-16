@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HarmonyLib;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,6 +8,7 @@ using Object = UnityEngine.Object;
 
 namespace PlanBuild.Plans
 {
+    [HarmonyPatch(typeof(PlanTotem))]
     internal class PlanTotem : Container
     {
         public static readonly List<PlanTotem> m_allPlanTotems = new List<PlanTotem>();
