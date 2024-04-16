@@ -26,22 +26,19 @@ namespace PlanBuild.Plans
 
         #region Container Override
 
-        static PlanTotem()
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(Container), nameof(Container.Interact))]
+        private static bool OnContainerInteract(Container __instance, bool hold, ref bool __result)
         {
-            On.Container.GetHoverText += OnContainerHoverText;
-            On.Container.Interact += OnContainerInteract;
-        }
-
-        private static bool OnContainerInteract(On.Container.orig_Interact orig, Container self, Humanoid character, bool hold, bool alt)
-        {
-            PlanTotem planTotem = self as PlanTotem;
-            if (planTotem && !hold && ZInput.GetButton("Crouch") && !self.IsInUse())
+            PlanTotem planTotem = __instance as PlanTotem;
+            if (planTotem && !hold && ZInput.GetButton("Crouch") && !__instance.IsInUse())
             {
                 planTotem.m_nview.InvokeRPC("ToggleEnabled");
+                __result = true;
+                return false;
+            }
                 return true;
             }
-            return orig(self, character, hold, alt);
-        }
 
         private static string OnContainerHoverText(On.Container.orig_GetHoverText orig, Container self)
         {
