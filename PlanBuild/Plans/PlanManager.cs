@@ -94,7 +94,9 @@ namespace PlanBuild.Plans
             }
         }
 
-        private static void Player_AddKnownPiece(On.Player.orig_AddKnownPiece orig, Player self, Piece piece)
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(Player), nameof(Player.AddKnownPiece))]
+        private static bool Player_AddKnownPiece(Player __instance, Piece piece)
         {
             if (piece.name.EndsWith(PlanPiecePrefab.PlannedSuffix))
             {
@@ -102,10 +104,9 @@ namespace PlanBuild.Plans
                 Jotunn.Logger.LogDebug($"Prevent notification for {piece.name}");
 #endif
                 Player.m_localPlayer.m_knownRecipes.Add(piece.m_name);
-                return;
+                return false;
             }
-
-            orig(self, piece);
+            return true;
         }
 
         /// <summary>
