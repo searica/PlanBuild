@@ -37,8 +37,8 @@ namespace PlanBuild.Plans
                 __result = true;
                 return false;
             }
-                return true;
-            }
+            return true;
+        }
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(Container), nameof(Container.GetHoverText))]
