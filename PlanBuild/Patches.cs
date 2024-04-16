@@ -25,6 +25,10 @@ namespace PlanBuild
             Harmony.PatchAll(typeof(BlueprintSync));
             Harmony.PatchAll(typeof(PlanManager));
             Harmony.PatchAll(typeof(BlueprintManager));
+            Harmony.PatchAll(typeof(ToolComponentPatches));
+            Harmony.PatchAll(typeof(PlanTotem));
+            Harmony.PatchAll(typeof(PlanHammerPrefab));
+
 
             if (Chainloader.PluginInfos.ContainsKey(BuildCameraGUID))
             {
