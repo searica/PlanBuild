@@ -246,12 +246,16 @@ namespace PlanBuild.Plans
             return true;
         }
         
-        private static void WearNTear_Destroy(On.WearNTear.orig_Destroy orig, WearNTear wearNTear)
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(WearNTear), nameof(WearNTear.Destroy))]
+        private static void WearNTear_Destroy(WearNTear __instance)
         {
             // Check if actually destoyed, not removed by middle clicking with Hammer
-            if (wearNTear.m_nview && wearNTear.m_nview.IsOwner()
-                                  && wearNTear.GetHealthPercentage() <= 0f
-                                  && PlanDB.Instance.FindPlanByPrefabName(wearNTear.name, out PlanPiecePrefab planPrefab))
+            if (__instance.m_nview &&
+                __instance.m_nview.IsOwner() &&
+                __instance.GetHealthPercentage() <= 0f &&
+                PlanDB.Instance.FindPlanByPrefabName(__instance.name, out PlanPiecePrefab planPrefab)
+            )
             {
                 foreach (PlanTotem planTotem in PlanTotem.m_allPlanTotems)
                 {
@@ -259,7 +263,7 @@ namespace PlanBuild.Plans
                     {
                         continue;
                     }
-                    GameObject gameObject = wearNTear.gameObject;
+                    GameObject gameObject = __instance.gameObject;
                     if (planTotem.InRange(gameObject))
                     {
                         planTotem.Replace(gameObject, planPrefab);
@@ -267,7 +271,6 @@ namespace PlanBuild.Plans
                     }
                 }
             }
-            orig(wearNTear);
         }
     }
 }
