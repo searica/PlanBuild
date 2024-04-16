@@ -54,6 +54,10 @@ namespace PlanBuild
     [HarmonyPatch(typeof(EventHooks))]
     internal static class EventHooks
     {
+        /// <summary>
+        ///     Fires after PieceRayTest is complete.
+        /// </summary>
+        public static event EventHandler<RayTestEventArgs> OnPlayerPieceRayTestComplete;
 
 
         /// <summary>
