@@ -132,28 +132,44 @@ namespace PlanBuild.Plans
             return false;
         }
 
-        private static bool Player_HaveRequirements(On.Player.orig_HaveRequirements_Piece_RequirementMode orig, Player self, Piece piece, Player.RequirementMode mode)
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(Player), nameof(Player.HaveRequirements))]
+        private static bool Player_HaveRequirements(
+            ref Piece piece,
+            ref Player.RequirementMode mode,
+            ref bool __result
+        )
         {
+            if (!piece || !PlanDB.Instance.FindOriginalByPrefabName(piece.gameObject.name, out Piece originalPiece))
+            {
+                return true;
+            }
+
             try
             {
-                if (piece && PlanDB.Instance.FindOriginalByPrefabName(piece.gameObject.name, out Piece originalPiece))
-                {
                     if (PlanBlacklist.Contains(originalPiece))
                     {
+                    __result = false;
                         return false;
                     }
                     if (Config.ShowAllPieces.Value)
                     {
-                        return true;
-                    }
-                    return self.HaveRequirements(originalPiece, Player.RequirementMode.IsKnown);
+                    __result = true;
+                    return false;
                 }
-            }
+
+                // modify arguments and run original method
+                mode = Player.RequirementMode.IsKnown;
+                piece = originalPiece;
+                        return true;
+
+                    }
             catch (Exception e)
             {
                 Logger.LogWarning($"Error while executing Player.HaveRequirements({piece},{mode}): {e}");
             }
-            return orig(self, piece, mode);
+
+            return true;
         }
 
         private static void Player_SetupPlacementGhost(On.Player.orig_SetupPlacementGhost orig, Player self)
