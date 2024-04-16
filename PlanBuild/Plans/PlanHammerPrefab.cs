@@ -149,7 +149,7 @@ namespace PlanBuild.Plans
         private class DeletePlansComponent : MonoBehaviour
         {
             private Piece LastHoveredPiece;
-            
+
             private void Start()
             {
                 EventHooks.OnPlayerPieceRayTestComplete += Player_PieceRayTest;
@@ -177,10 +177,26 @@ namespace PlanBuild.Plans
                 {
                     planPiece.m_wearNTear.Remove();
                 }
+            }
         }
-        }
+
+        /// <summary>
+        ///     Patch to allow selectively preventing PlacePiece from executing 
+        ///     based whether there is a living instance of the DeletePlansComponent class.
+        /// </summary>
+        /// <param name="__result"></param>
+        /// <returns></returns>
+        [HarmonyPrefix]
+        [HarmonyPriority(Priority.Last)]
+        [HarmonyPatch(typeof(Player), nameof(Player.PlacePiece))]
+        private static bool PlacePieceBlocker(ref bool __result)
+        {
+            if (DeletePlanComponentCounter > 0)
+            {
+                __result = false;
                 return false;
             }
+            return true;
         }
     }
 }
