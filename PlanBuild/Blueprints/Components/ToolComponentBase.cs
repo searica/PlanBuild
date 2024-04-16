@@ -18,6 +18,28 @@ namespace PlanBuild.Blueprints.Components
         internal bool ResetPlacementOffset = true;
         internal bool ResetMarkerOffset = true;
 
+        [HarmonyPatch(typeof(ToolComponentPatches))]
+        internal static class ToolComponentPatches
+        {
+            /// <summary>
+            ///     Dont highlight pieces while capturing when enabled
+            /// </summary>
+            [HarmonyPrefix]
+            [HarmonyPatch(typeof(WearNTear), nameof(WearNTear.Highlight))]
+            private static bool WearNTearHighlightPrefix(WearNTear __instance)
+            {
+                if (__instance)
+                {
+                    var toolCompBase = __instance.gameObject.GetComponentInChildren<ToolComponentBase>();
+                    if (toolCompBase && !toolCompBase.SuppressPieceHighlight)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+
         private void Start()
         {
             OnStart();
@@ -33,7 +55,7 @@ namespace PlanBuild.Blueprints.Components
             }
 
             EventHooks.OnPlayerUpdatedPlacement += Player_UpdatePlacement;
-            On.Player.UpdateWearNTearHover += Player_UpdateWearNTearHover;
+
             On.Player.PlacePiece += Player_PlacePiece;
 
             On.Player.UpdatePlacementGhost += Player_UpdatePlacementGhost;
@@ -97,17 +119,6 @@ namespace PlanBuild.Blueprints.Components
             MarkerOffset = Vector3.zero;
             CameraOffset = 0f;
             DisableSelectionProjector();
-        }
-
-        /// <summary>
-        ///     Dont highlight pieces while capturing when enabled
-        /// </summary>
-        private void Player_UpdateWearNTearHover(On.Player.orig_UpdateWearNTearHover orig, Player self)
-        {
-            if (!SuppressPieceHighlight)
-            {
-                orig(self);
-            }
         }
 
         public float GetPlacementOffset(float scrollWheel)
