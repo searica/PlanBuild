@@ -234,14 +234,16 @@ namespace PlanBuild.Plans
             return true;
         }
 
-        private static void WearNTear_Highlight(On.WearNTear.orig_Highlight orig, WearNTear self)
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(WearNTear), nameof(WearNTear.Highlight))]
+        private static bool WearNTear_Highlight(WearNTear __instance)
         {
-            if (!PlanCrystalPrefab.ShowRealTextures && self.TryGetComponent(out PlanPiece planPiece))
+            if (!PlanCrystalPrefab.ShowRealTextures && __instance.TryGetComponent(out PlanPiece planPiece))
             {
                 planPiece.Highlight();
-                return;
+                return false;
             }
-            orig(self);
+            return true;
         }
         
         private static void WearNTear_Destroy(On.WearNTear.orig_Destroy orig, WearNTear wearNTear)
