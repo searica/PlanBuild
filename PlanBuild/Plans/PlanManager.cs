@@ -20,19 +20,16 @@ namespace PlanBuild.Plans
 
             // Init commands
             PlanCommands.Init();
+        }
 
-            // Hooks
-            On.DungeonDB.Start += (orig, self) =>
+        /// <summary>
+        ///     Trigger initial scan after DungeonDB.Start
+        /// </summary>
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(DungeonDB), nameof(DungeonDB.Start))]
+        private static void DungeonDBStartHook()
             {
-                orig(self);
                 PlanDB.Instance.ScanPieceTables();
-            };
-            On.Player.AddKnownPiece += Player_AddKnownPiece;
-            On.Player.HaveRequirements_Piece_RequirementMode += Player_HaveRequirements;
-            On.Player.SetupPlacementGhost += Player_SetupPlacementGhost;
-            On.Player.CheckCanRemovePiece += Player_CheckCanRemovePiece;
-            On.WearNTear.Highlight += WearNTear_Highlight;
-            On.WearNTear.Destroy += WearNTear_Destroy;
         }
         
         public static void UpdateKnownRecipes()
