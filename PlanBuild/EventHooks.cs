@@ -59,6 +59,10 @@ namespace PlanBuild
         /// </summary>
         public static event EventHandler<RayTestEventArgs> OnPlayerPieceRayTestComplete;
 
+        /// <summary>
+        ///     Fires before a player places a piece.
+        /// </summary>
+        public static event EventHandler<PlayerEventArgs> OnPlayerPlacePiece;
 
         /// <summary>
         ///     Prefix
