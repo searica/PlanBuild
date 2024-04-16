@@ -1,4 +1,5 @@
-﻿using Jotunn.Configs;
+﻿using HarmonyLib;
+using Jotunn.Configs;
 using Jotunn.Entities;
 using Jotunn.Managers;
 using PlanBuild.Blueprints;
@@ -10,7 +11,8 @@ using Logger = Jotunn.Logger;
 
 namespace PlanBuild.Plans
 {
-    internal class PlanHammerPrefab
+    [HarmonyPatch(typeof(PlanHammerPrefab))]
+    internal static class PlanHammerPrefab
     {
         public const string PlanHammerName = "PlanHammer";
         public const string PlanHammerItemName = "$item_plan_hammer";
