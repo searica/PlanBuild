@@ -152,8 +152,9 @@ namespace PlanBuild.Plans
             
             private void Start()
             {
-                On.Player.PieceRayTest += Player_PieceRayTest;
-                On.Player.PlacePiece += Player_PlacePiece;
+                EventHooks.OnPlayerPieceRayTestComplete += Player_PieceRayTest;
+                EventHooks.OnPlayerPlacePiece += Player_PlacePiece;
+                DeletePlanComponentCounter += 1;
                 Logger.LogDebug($"{gameObject.name} started");
             }
             
