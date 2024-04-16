@@ -78,5 +78,20 @@ namespace PlanBuild
 
         public static event EventHandler<PlayerEventArgs> OnPlayerHaveRequirements_Piece_RequirementMode;
 
+
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(Player), nameof(Player.PieceRayTest))]
+        private static void PieceRayTestPostfix(Player __instance, Piece piece)
+        {
+            OnPlayerPieceRayTestComplete.SafeInvoke(null, new RayTestEventArgs(__instance, piece));
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPriority(Priority.First)]
+        [HarmonyPatch(typeof(Player), nameof(Player.PlacePiece))]
+        private static void PlacePiecePrefix()
+        {
+            OnPlayerPlacePiece.SafeInvoke(null, new PlayerEventArgs(null));
+        }
     }
 }
