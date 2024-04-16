@@ -68,7 +68,7 @@
       <HintPath>..\libraries\pub\ValheimRAFT.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="MMHOOK_assembly_googleanalytics">
+    <!--<Reference Include="MMHOOK_assembly_googleanalytics">
       <HintPath>$(VALHEIM_INSTALL)\BepInEx\plugins\MMHOOK\MMHOOK_assembly_googleanalytics.dll</HintPath>
       <Private>False</Private>
     </Reference>
@@ -103,7 +103,7 @@
     <Reference Include="MMHOOK_assembly_valheim">
       <HintPath>$(VALHEIM_INSTALL)\BepInEx\plugins\MMHOOK\MMHOOK_assembly_valheim.dll</HintPath>
       <Private>False</Private>
-    </Reference>
+    </Reference>-->
     <Reference Include="Mono.Cecil, Version=0.11.4.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
       <HintPath>..\packages\Mono.Cecil.0.11.4\lib\net40\Mono.Cecil.dll</HintPath>
     </Reference>
