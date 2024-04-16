@@ -1,4 +1,5 @@
-﻿using Jotunn.Managers;
+﻿using HarmonyLib;
+using Jotunn.Managers;
 using PlanBuild.Blueprints;
 using PlanBuild.Utils;
 using System;
@@ -9,6 +10,7 @@ using Object = UnityEngine.Object;
 
 namespace PlanBuild.Plans
 {
+    [HarmonyPatch(typeof(PlanManager))]
     internal static class PlanManager
     {
         internal static void Init()
@@ -28,10 +30,10 @@ namespace PlanBuild.Plans
         [HarmonyPostfix]
         [HarmonyPatch(typeof(DungeonDB), nameof(DungeonDB.Start))]
         private static void DungeonDBStartHook()
-            {
-                PlanDB.Instance.ScanPieceTables();
+        {
+            PlanDB.Instance.ScanPieceTables();
         }
-        
+
         public static void UpdateKnownRecipes()
         {
             Player player = Player.m_localPlayer;
@@ -147,13 +149,13 @@ namespace PlanBuild.Plans
 
             try
             {
-                    if (PlanBlacklist.Contains(originalPiece))
-                    {
+                if (PlanBlacklist.Contains(originalPiece))
+                {
                     __result = false;
-                        return false;
-                    }
-                    if (Config.ShowAllPieces.Value)
-                    {
+                    return false;
+                }
+                if (Config.ShowAllPieces.Value)
+                {
                     __result = true;
                     return false;
                 }
@@ -161,9 +163,9 @@ namespace PlanBuild.Plans
                 // modify arguments and run original method
                 mode = Player.RequirementMode.IsKnown;
                 piece = originalPiece;
-                        return true;
+                return true;
 
-                    }
+            }
             catch (Exception e)
             {
                 Logger.LogWarning($"Error while executing Player.HaveRequirements({piece},{mode}): {e}");
@@ -211,7 +213,7 @@ namespace PlanBuild.Plans
                 PlanPiece.m_forceDisableInit = false;
             }
         }
-        
+
         [HarmonyPrefix]
         [HarmonyPatch(typeof(Player), nameof(Player.CheckCanRemovePiece))]
         private static bool Player_CheckCanRemovePiece(Player __instance, Piece piece, ref bool __result)
@@ -245,7 +247,7 @@ namespace PlanBuild.Plans
             }
             return true;
         }
-        
+
         [HarmonyPrefix]
         [HarmonyPatch(typeof(WearNTear), nameof(WearNTear.Destroy))]
         private static void WearNTear_Destroy(WearNTear __instance)
