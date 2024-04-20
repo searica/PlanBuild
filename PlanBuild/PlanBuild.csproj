@@ -41,7 +41,7 @@
 			<HintPath>..\libraries\pub\ValheimRAFT.dll</HintPath>
 			<Private>False</Private>
 		</Reference>
-		<!--<Reference Include="MMHOOK_assembly_googleanalytics">
+		<Reference Include="MMHOOK_assembly_googleanalytics">
 			<HintPath>$(MOD_DEPLOYPATH)\MMHOOK\MMHOOK_assembly_googleanalytics.dll</HintPath>
 			<Private>False</Private>
 		</Reference>
@@ -76,7 +76,7 @@
 		<Reference Include="MMHOOK_assembly_valheim">
 			<HintPath>$(MOD_DEPLOYPATH)\MMHOOK\MMHOOK_assembly_valheim.dll</HintPath>
 			<Private>False</Private>
-		</Reference>-->
+		</Reference>
 	</ItemGroup>
 	<ItemGroup>
 		<EmbeddedResource Include="EmbeddedAssets\blueprints" />
